@@ -1,0 +1,475 @@
+@base <https://www.rpg-schema.org/srd/5.2/> .
+@prefix srd52:  <https://www.rpg-schema.org/srd/5.2/> .
+@prefix rpg:    <http://www.rpg-schema.org/1.0/> .
+@prefix orag:   <https://www.ontorag.org/vocab#> .
+@prefix schema: <https://schema.org/> .
+@prefix dct:    <http://purl.org/dc/terms/> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+
+#################################################################
+# Ontology header
+#################################################################
+
+srd52: a owl:Ontology ;
+  dct:title "D&D SRD 5.2 profile for RPG Schema"@en ;
+  dct:description "An SRD 5.2 specific ontology/profile that extends RPG Schema and uses ORAG to reconnect each modeled concept to its exact source locations in the SRD."@en ;
+  owl:imports rpg:, orag: ;
+  rdfs:comment "Use this module as the D&D 5.2 layer on top of generic rpg-schema. It adds SRD-specific typing, modeling conventions, and representative instances. The full corpus can then be materialized automatically from the SRD parser."@en .
+
+#################################################################
+# SRD-specific classes
+#################################################################
+
+srd52:AbilityScore a owl:Class ;
+  rdfs:subClassOf rpg:RuleSetAttribute ;
+  rdfs:label "Ability Score"@en ;
+  rdfs:comment "One of the six D&D core ability definitions."@en .
+
+srd52:Skill a owl:Class ;
+  rdfs:subClassOf rpg:Proficiency ;
+  rdfs:label "Skill"@en ;
+  rdfs:comment "A D&D skill proficiency definition such as Acrobatics or Arcana."@en .
+
+srd52:SavingThrowType a owl:Class ;
+  rdfs:subClassOf rpg:Proficiency ;
+  rdfs:label "Saving Throw Type"@en ;
+  rdfs:comment "A named saving throw proficiency keyed to an ability."@en .
+
+srd52:Background a owl:Class ;
+  rdfs:subClassOf schema:DefinedTerm ;
+  rdfs:label "Background"@en ;
+  rdfs:comment "A character background definition from SRD 5.2."@en .
+
+srd52:Species a owl:Class ;
+  rdfs:subClassOf rpg:RuleSetRace ;
+  rdfs:label "Species"@en ;
+  rdfs:comment "A playable species definition from SRD 5.2."@en .
+
+srd52:Feat a owl:Class ;
+  rdfs:subClassOf rpg:Feature ;
+  rdfs:label "Feat"@en ;
+  rdfs:comment "A feat definition from SRD 5.2."@en .
+
+srd52:ClassFeature a owl:Class ;
+  rdfs:subClassOf rpg:Feature ;
+  rdfs:label "Class Feature"@en ;
+  rdfs:comment "A feature granted by a class or subclass."@en .
+
+srd52:EquipmentItem a owl:Class ;
+  rdfs:subClassOf schema:DefinedTerm ;
+  rdfs:label "Equipment Item"@en ;
+  rdfs:comment "A nonmagical or magical equipment definition from SRD 5.2."@en .
+
+srd52:Weapon a owl:Class ;
+  rdfs:subClassOf srd52:EquipmentItem ;
+  rdfs:label "Weapon"@en .
+
+srd52:Armor a owl:Class ;
+  rdfs:subClassOf srd52:EquipmentItem ;
+  rdfs:label "Armor"@en .
+
+srd52:Tool a owl:Class ;
+  rdfs:subClassOf srd52:EquipmentItem ;
+  rdfs:label "Tool"@en .
+
+srd52:D20Test a owl:Class ;
+  rdfs:subClassOf rpg:Roll ;
+  rdfs:label "D20 Test"@en ;
+  rdfs:comment "The generic SRD 5.2 resolution family covering ability checks, saving throws, and attack rolls."@en .
+
+srd52:AbilityCheck a owl:Class ;
+  rdfs:subClassOf srd52:D20Test ;
+  rdfs:label "Ability Check"@en .
+
+srd52:SavingThrowRoll a owl:Class ;
+  rdfs:subClassOf srd52:D20Test ;
+  rdfs:label "Saving Throw Roll"@en .
+
+srd52:AttackRoll a owl:Class ;
+  rdfs:subClassOf srd52:D20Test ;
+  rdfs:label "Attack Roll"@en .
+
+srd52:DamageRoll a owl:Class ;
+  rdfs:subClassOf rpg:Roll ;
+  rdfs:label "Damage Roll"@en .
+
+srd52:ActionType a owl:Class ;
+  rdfs:subClassOf schema:DefinedTerm ;
+  rdfs:label "Action Economy Type"@en ;
+  rdfs:comment "Whether a capability is an Action, Bonus Action, Reaction, free interaction, or similar."@en .
+
+srd52:DamageType a owl:Class ;
+  rdfs:subClassOf schema:DefinedTerm ;
+  rdfs:label "Damage Type"@en .
+
+srd52:SenseType a owl:Class ;
+  rdfs:subClassOf schema:DefinedTerm ;
+  rdfs:label "Sense Type"@en .
+
+#################################################################
+# SRD-specific properties
+#################################################################
+
+srd52:defaultsToAbility a owl:ObjectProperty ;
+  rdfs:label "defaults to ability"@en ;
+  rdfs:comment "Links a skill or saving throw type to the ability normally used with it."@en ;
+  rdfs:domain rpg:Capability ;
+  rdfs:range srd52:AbilityScore .
+
+srd52:usesAbility a owl:ObjectProperty ;
+  rdfs:label "uses ability"@en ;
+  rdfs:comment "Links a roll definition or feature to the ability it typically uses."@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range srd52:AbilityScore .
+
+srd52:grantsSkill a owl:ObjectProperty ;
+  rdfs:label "grants skill"@en ;
+  rdfs:comment "Links a class, background, species, or feat to a skill it grants."@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range srd52:Skill .
+
+srd52:grantsSavingThrowProficiency a owl:ObjectProperty ;
+  rdfs:label "grants saving throw proficiency"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range srd52:SavingThrowType .
+
+srd52:grantsFeat a owl:ObjectProperty ;
+  rdfs:label "grants feat"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range srd52:Feat .
+
+srd52:grantsFeature a owl:ObjectProperty ;
+  rdfs:label "grants feature"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range srd52:ClassFeature .
+
+srd52:grantsToolProficiency a owl:ObjectProperty ;
+  rdfs:label "grants tool proficiency"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range srd52:Tool .
+
+srd52:availableAtLevel a owl:DatatypeProperty ;
+  rdfs:label "available at level"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range xsd:positiveInteger .
+
+srd52:hasActionType a owl:ObjectProperty ;
+  rdfs:label "has action type"@en ;
+  rdfs:domain rpg:Capability ;
+  rdfs:range srd52:ActionType .
+
+srd52:hasDamageType a owl:ObjectProperty ;
+  rdfs:label "has damage type"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range srd52:DamageType .
+
+srd52:hasNormalRange a owl:DatatypeProperty ;
+  rdfs:label "has normal range"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range xsd:string .
+
+srd52:hasLongRange a owl:DatatypeProperty ;
+  rdfs:label "has long range"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range xsd:string .
+
+srd52:hasDieExpression a owl:DatatypeProperty ;
+  rdfs:label "has die expression"@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range xsd:string .
+
+srd52:hasBaseACFormula a owl:DatatypeProperty ;
+  rdfs:label "has base AC formula"@en ;
+  rdfs:domain rpg:Tracker ;
+  rdfs:range xsd:string .
+
+srd52:hasSourceReference a owl:ObjectProperty ;
+  rdfs:label "has source reference"@en ;
+  rdfs:comment "Convenience bridge to ORAG. Prefer ORAG Reference/Evidence as the actual citation graph."@en ;
+  rdfs:domain owl:Thing ;
+  rdfs:range orag:Reference .
+
+#################################################################
+# Ruleset instance
+#################################################################
+
+srd52:SRD52 a rpg:RuleSet ;
+  schema:name "System Reference Document 5.2"@en ;
+  schema:termCode "SRD5.2" ;
+  schema:version "5.2" ;
+  dct:license <https://creativecommons.org/licenses/by/4.0/> ;
+  rpg:description "Dungeons & Dragons SRD 5.2 modeled as a ruleset-specific layer over RPG Schema."@en .
+
+#################################################################
+# ORAG source for the imported SRD document
+#################################################################
+
+srd52:source-srd52-md a orag:Source ;
+  dct:title "DND-SRD-5.2-CC.md"@en ;
+  orag:sourceId "DND-SRD-5.2-CC.md" ;
+  orag:mediaType "text/markdown" ;
+  orag:sourceVersion "5.2" ;
+  dct:license <https://creativecommons.org/licenses/by/4.0/> .
+
+#################################################################
+# Canonical attributes used by the mapping layer
+#################################################################
+
+srd52:PhysicalStrength a rpg:CanonicalAttribute ; schema:name "Physical Strength"@en ; schema:termCode "canon.strength" .
+srd52:Agility a rpg:CanonicalAttribute ; schema:name "Agility"@en ; schema:termCode "canon.agility" .
+srd52:Endurance a rpg:CanonicalAttribute ; schema:name "Endurance"@en ; schema:termCode "canon.endurance" .
+srd52:Reasoning a rpg:CanonicalAttribute ; schema:name "Reasoning"@en ; schema:termCode "canon.reasoning" .
+srd52:PerceptionWill a rpg:CanonicalAttribute ; schema:name "Perception and Will"@en ; schema:termCode "canon.wisdom" .
+srd52:Presence a rpg:CanonicalAttribute ; schema:name "Presence"@en ; schema:termCode "canon.charisma" .
+
+#################################################################
+# Ability scores + mappings
+#################################################################
+
+srd52:Strength a srd52:AbilityScore ;
+  schema:name "Strength"@en ; schema:termCode "STR" ;
+  rpg:description "Measures physical might."@en ;
+  rpg:definedInRuleSet srd52:SRD52 .
+
+srd52:Dexterity a srd52:AbilityScore ;
+  schema:name "Dexterity"@en ; schema:termCode "DEX" ;
+  rpg:description "Measures agility, reflexes, and balance."@en ;
+  rpg:definedInRuleSet srd52:SRD52 .
+
+srd52:Constitution a srd52:AbilityScore ;
+  schema:name "Constitution"@en ; schema:termCode "CON" ;
+  rpg:description "Measures health and stamina."@en ;
+  rpg:definedInRuleSet srd52:SRD52 .
+
+srd52:Intelligence a srd52:AbilityScore ;
+  schema:name "Intelligence"@en ; schema:termCode "INT" ;
+  rpg:description "Measures reasoning and memory."@en ;
+  rpg:definedInRuleSet srd52:SRD52 .
+
+srd52:Wisdom a srd52:AbilityScore ;
+  schema:name "Wisdom"@en ; schema:termCode "WIS" ;
+  rpg:description "Measures perceptiveness and mental fortitude."@en ;
+  rpg:definedInRuleSet srd52:SRD52 .
+
+srd52:Charisma a srd52:AbilityScore ;
+  schema:name "Charisma"@en ; schema:termCode "CHA" ;
+  rpg:description "Measures confidence, poise, and charm."@en ;
+  rpg:definedInRuleSet srd52:SRD52 .
+
+srd52:map-STR a rpg:AttributeMapping ; rpg:fromRuleSetAttribute srd52:Strength ; rpg:toCanonicalAttribute srd52:PhysicalStrength ; rpg:mappingDefinedInRuleSet srd52:SRD52 ; rpg:mappingExpression "identity" .
+srd52:map-DEX a rpg:AttributeMapping ; rpg:fromRuleSetAttribute srd52:Dexterity ; rpg:toCanonicalAttribute srd52:Agility ; rpg:mappingDefinedInRuleSet srd52:SRD52 ; rpg:mappingExpression "identity" .
+srd52:map-CON a rpg:AttributeMapping ; rpg:fromRuleSetAttribute srd52:Constitution ; rpg:toCanonicalAttribute srd52:Endurance ; rpg:mappingDefinedInRuleSet srd52:SRD52 ; rpg:mappingExpression "identity" .
+srd52:map-INT a rpg:AttributeMapping ; rpg:fromRuleSetAttribute srd52:Intelligence ; rpg:toCanonicalAttribute srd52:Reasoning ; rpg:mappingDefinedInRuleSet srd52:SRD52 ; rpg:mappingExpression "identity" .
+srd52:map-WIS a rpg:AttributeMapping ; rpg:fromRuleSetAttribute srd52:Wisdom ; rpg:toCanonicalAttribute srd52:PerceptionWill ; rpg:mappingDefinedInRuleSet srd52:SRD52 ; rpg:mappingExpression "identity" .
+srd52:map-CHA a rpg:AttributeMapping ; rpg:fromRuleSetAttribute srd52:Charisma ; rpg:toCanonicalAttribute srd52:Presence ; rpg:mappingDefinedInRuleSet srd52:SRD52 ; rpg:mappingExpression "identity" .
+
+#################################################################
+# Skills
+#################################################################
+
+srd52:Acrobatics a srd52:Skill ; schema:name "Acrobatics"@en ; schema:termCode "acrobatics" ; srd52:defaultsToAbility srd52:Dexterity ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:AnimalHandling a srd52:Skill ; schema:name "Animal Handling"@en ; schema:termCode "animal-handling" ; srd52:defaultsToAbility srd52:Wisdom ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Arcana a srd52:Skill ; schema:name "Arcana"@en ; schema:termCode "arcana" ; srd52:defaultsToAbility srd52:Intelligence ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Athletics a srd52:Skill ; schema:name "Athletics"@en ; schema:termCode "athletics" ; srd52:defaultsToAbility srd52:Strength ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Deception a srd52:Skill ; schema:name "Deception"@en ; schema:termCode "deception" ; srd52:defaultsToAbility srd52:Charisma ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:History a srd52:Skill ; schema:name "History"@en ; schema:termCode "history" ; srd52:defaultsToAbility srd52:Intelligence ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Insight a srd52:Skill ; schema:name "Insight"@en ; schema:termCode "insight" ; srd52:defaultsToAbility srd52:Wisdom ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Intimidation a srd52:Skill ; schema:name "Intimidation"@en ; schema:termCode "intimidation" ; srd52:defaultsToAbility srd52:Charisma ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Investigation a srd52:Skill ; schema:name "Investigation"@en ; schema:termCode "investigation" ; srd52:defaultsToAbility srd52:Intelligence ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Medicine a srd52:Skill ; schema:name "Medicine"@en ; schema:termCode "medicine" ; srd52:defaultsToAbility srd52:Wisdom ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Nature a srd52:Skill ; schema:name "Nature"@en ; schema:termCode "nature" ; srd52:defaultsToAbility srd52:Intelligence ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Perception a srd52:Skill ; schema:name "Perception"@en ; schema:termCode "perception" ; srd52:defaultsToAbility srd52:Wisdom ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Performance a srd52:Skill ; schema:name "Performance"@en ; schema:termCode "performance" ; srd52:defaultsToAbility srd52:Charisma ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Persuasion a srd52:Skill ; schema:name "Persuasion"@en ; schema:termCode "persuasion" ; srd52:defaultsToAbility srd52:Charisma ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Religion a srd52:Skill ; schema:name "Religion"@en ; schema:termCode "religion" ; srd52:defaultsToAbility srd52:Intelligence ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:SleightOfHand a srd52:Skill ; schema:name "Sleight of Hand"@en ; schema:termCode "sleight-of-hand" ; srd52:defaultsToAbility srd52:Dexterity ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Stealth a srd52:Skill ; schema:name "Stealth"@en ; schema:termCode "stealth" ; srd52:defaultsToAbility srd52:Dexterity ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:Survival a srd52:Skill ; schema:name "Survival"@en ; schema:termCode "survival" ; srd52:defaultsToAbility srd52:Wisdom ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+
+#################################################################
+# Saving throws, core rolls, trackers
+#################################################################
+
+srd52:StrengthSave a srd52:SavingThrowType ; schema:name "Strength Save"@en ; srd52:defaultsToAbility srd52:Strength ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:DexteritySave a srd52:SavingThrowType ; schema:name "Dexterity Save"@en ; srd52:defaultsToAbility srd52:Dexterity ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:ConstitutionSave a srd52:SavingThrowType ; schema:name "Constitution Save"@en ; srd52:defaultsToAbility srd52:Constitution ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:IntelligenceSave a srd52:SavingThrowType ; schema:name "Intelligence Save"@en ; srd52:defaultsToAbility srd52:Intelligence ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:WisdomSave a srd52:SavingThrowType ; schema:name "Wisdom Save"@en ; srd52:defaultsToAbility srd52:Wisdom ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:CharismaSave a srd52:SavingThrowType ; schema:name "Charisma Save"@en ; srd52:defaultsToAbility srd52:Charisma ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+
+srd52:AbilityCheckRoll a srd52:AbilityCheck ; rpg:rollDefinedInRuleSet srd52:SRD52 ; rpg:usesResolutionModel rpg:D20Model ; rpg:rollExpression "1d20 + relevant ability modifier + proficiency if applicable vs DC" .
+srd52:SavingThrowRollDef a srd52:SavingThrowRoll ; rpg:rollDefinedInRuleSet srd52:SRD52 ; rpg:usesResolutionModel rpg:D20Model ; rpg:rollExpression "1d20 + relevant ability modifier + proficiency if applicable vs DC" .
+srd52:AttackRollDef a srd52:AttackRoll ; rpg:rollDefinedInRuleSet srd52:SRD52 ; rpg:usesResolutionModel rpg:D20Model ; rpg:rollExpression "1d20 + relevant ability modifier + proficiency if applicable vs AC" .
+srd52:DeathSavingThrow a srd52:SavingThrowRoll ; rpg:rollDefinedInRuleSet srd52:SRD52 ; rpg:usesResolutionModel rpg:D20Model ; rpg:rollExpression "1d20; 10+ success, 1 = two failures, 20 = regain 1 HP" .
+
+srd52:HitPoints a rpg:Tracker ; schema:name "Hit Points"@en ; schema:termCode "hp" ; rpg:trackerDefinedInRuleSet srd52:SRD52 .
+srd52:TemporaryHitPoints a rpg:Tracker ; schema:name "Temporary Hit Points"@en ; schema:termCode "temp-hp" ; rpg:trackerDefinedInRuleSet srd52:SRD52 .
+srd52:ArmorClassTracker a rpg:Tracker ; schema:name "Armor Class"@en ; schema:termCode "ac" ; srd52:hasBaseACFormula "10 + Dexterity modifier" ; rpg:trackerDefinedInRuleSet srd52:SRD52 .
+srd52:ProficiencyBonusTracker a rpg:Tracker ; schema:name "Proficiency Bonus"@en ; schema:termCode "pb" ; rpg:trackerDefinedInRuleSet srd52:SRD52 .
+srd52:HeroicInspirationTracker a rpg:Tracker ; schema:name "Heroic Inspiration"@en ; schema:termCode "heroic-inspiration" ; rpg:trackerDefinedInRuleSet srd52:SRD52 .
+srd52:ExperiencePoints a rpg:Tracker ; schema:name "Experience Points"@en ; schema:termCode "xp" ; rpg:trackerDefinedInRuleSet srd52:SRD52 .
+
+#################################################################
+# Core actions
+#################################################################
+
+srd52:ActionEconomyAction a srd52:ActionType ; schema:name "Action"@en .
+srd52:BonusActionType a srd52:ActionType ; schema:name "Bonus Action"@en .
+srd52:ReactionType a srd52:ActionType ; schema:name "Reaction"@en .
+
+srd52:AttackAction a rpg:Action ; schema:name "Attack"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction ; rpg:description "Attack with a weapon or an Unarmed Strike."@en .
+srd52:DashAction a rpg:Action ; schema:name "Dash"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:DisengageAction a rpg:Action ; schema:name "Disengage"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:DodgeAction a rpg:Action ; schema:name "Dodge"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:HelpAction a rpg:Action ; schema:name "Help"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:HideAction a rpg:Action ; schema:name "Hide"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction ; rpg:rollForCapability srd52:AbilityCheckRoll .
+srd52:InfluenceAction a rpg:Action ; schema:name "Influence"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:MagicAction a rpg:Action ; schema:name "Magic"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:ReadyAction a rpg:Action ; schema:name "Ready"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:SearchAction a rpg:Action ; schema:name "Search"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:StudyAction a rpg:Action ; schema:name "Study"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:UtilizeAction a rpg:Action ; schema:name "Utilize"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ActionEconomyAction .
+srd52:OpportunityAttack a rpg:Action ; schema:name "Opportunity Attack"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:hasActionType srd52:ReactionType .
+
+#################################################################
+# Conditions (representative sample)
+#################################################################
+
+srd52:Blinded a rpg:Condition ; schema:name "Blinded"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Charmed a rpg:Condition ; schema:name "Charmed"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Deafened a rpg:Condition ; schema:name "Deafened"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Frightened a rpg:Condition ; schema:name "Frightened"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Grappled a rpg:Condition ; schema:name "Grappled"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Incapacitated a rpg:Condition ; schema:name "Incapacitated"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Invisible a rpg:Condition ; schema:name "Invisible"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Paralyzed a rpg:Condition ; schema:name "Paralyzed"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Poisoned a rpg:Condition ; schema:name "Poisoned"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Prone a rpg:Condition ; schema:name "Prone"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Restrained a rpg:Condition ; schema:name "Restrained"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Stunned a rpg:Condition ; schema:name "Stunned"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+srd52:Unconscious a rpg:Condition ; schema:name "Unconscious"@en ; rpg:stateDefinedInRuleSet srd52:SRD52 .
+
+#################################################################
+# Species, backgrounds, classes (representative SRD instances)
+#################################################################
+
+srd52:Human a srd52:Species ; schema:name "Human"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+srd52:Elf a srd52:Species ; schema:name "Elf"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+srd52:Dwarf a srd52:Species ; schema:name "Dwarf"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+srd52:Gnome a srd52:Species ; schema:name "Gnome"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+srd52:Halfling a srd52:Species ; schema:name "Halfling"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+srd52:Dragonborn a srd52:Species ; schema:name "Dragonborn"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+srd52:Goliath a srd52:Species ; schema:name "Goliath"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+srd52:Orc a srd52:Species ; schema:name "Orc"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+srd52:Tiefling a srd52:Species ; schema:name "Tiefling"@en ; rpg:raceDefinedInRuleSet srd52:SRD52 .
+
+srd52:Acolyte a srd52:Background ; schema:name "Acolyte"@en ; srd52:grantsFeat srd52:MagicInitiateCleric ; srd52:grantsSkill srd52:Insight, srd52:Religion ; rpg:description "Background oriented around religion, learning, and sacred practice."@en .
+srd52:Criminal a srd52:Background ; schema:name "Criminal"@en ; srd52:grantsFeat srd52:AlertFeat ; srd52:grantsSkill srd52:SleightOfHand, srd52:Stealth .
+srd52:Sage a srd52:Background ; schema:name "Sage"@en ; srd52:grantsFeat srd52:MagicInitiateWizard ; srd52:grantsSkill srd52:Arcana, srd52:History .
+srd52:Soldier a srd52:Background ; schema:name "Soldier"@en ; srd52:grantsFeat srd52:SavageAttacker ; srd52:grantsSkill srd52:Athletics, srd52:Intimidation .
+
+srd52:Barbarian a rpg:RuleSetClass ; schema:name "Barbarian"@en ; rpg:classDefinedInRuleSet srd52:SRD52 ; srd52:grantsSavingThrowProficiency srd52:StrengthSave, srd52:ConstitutionSave .
+srd52:Bard a rpg:RuleSetClass ; schema:name "Bard"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Cleric a rpg:RuleSetClass ; schema:name "Cleric"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Druid a rpg:RuleSetClass ; schema:name "Druid"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Fighter a rpg:RuleSetClass ; schema:name "Fighter"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Monk a rpg:RuleSetClass ; schema:name "Monk"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Paladin a rpg:RuleSetClass ; schema:name "Paladin"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Ranger a rpg:RuleSetClass ; schema:name "Ranger"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Rogue a rpg:RuleSetClass ; schema:name "Rogue"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Sorcerer a rpg:RuleSetClass ; schema:name "Sorcerer"@en ; rpg:classDefinedInRuleSet srd52:SRD52 ; srd52:grantsSavingThrowProficiency srd52:ConstitutionSave, srd52:CharismaSave .
+srd52:Warlock a rpg:RuleSetClass ; schema:name "Warlock"@en ; rpg:classDefinedInRuleSet srd52:SRD52 .
+srd52:Wizard a rpg:RuleSetClass ; schema:name "Wizard"@en ; rpg:classDefinedInRuleSet srd52:SRD52 ; srd52:grantsSavingThrowProficiency srd52:IntelligenceSave, srd52:WisdomSave .
+
+#################################################################
+# Feats and class features (representative instances)
+#################################################################
+
+srd52:AlertFeat a srd52:Feat ; schema:name "Alert"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:SavageAttacker a srd52:Feat ; schema:name "Savage Attacker"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:MagicInitiateCleric a srd52:Feat ; schema:name "Magic Initiate (Cleric)"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+srd52:MagicInitiateWizard a srd52:Feat ; schema:name "Magic Initiate (Wizard)"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 .
+
+srd52:Rage a srd52:ClassFeature ; schema:name "Rage"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:availableAtLevel 1 .
+srd52:ExtraAttack a srd52:ClassFeature ; schema:name "Extra Attack"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:availableAtLevel 5 .
+srd52:SpellcastingFeature a srd52:ClassFeature ; schema:name "Spellcasting"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:availableAtLevel 1 .
+srd52:ArcaneRecovery a srd52:ClassFeature ; schema:name "Arcane Recovery"@en ; rpg:capabilityDefinedInRuleSet srd52:SRD52 ; srd52:availableAtLevel 1 .
+
+srd52:BarbarianLevel1 a rpg:ClassLevelDefinition ; schema:name "Barbarian Level 1"@en ; rpg:levelDefinedInRuleSet srd52:SRD52 ; rpg:levelForClass srd52:Barbarian ; rpg:levelNumber 1 ; srd52:grantsFeature srd52:Rage .
+srd52:BarbarianLevel5 a rpg:ClassLevelDefinition ; schema:name "Barbarian Level 5"@en ; rpg:levelDefinedInRuleSet srd52:SRD52 ; rpg:levelForClass srd52:Barbarian ; rpg:levelNumber 5 ; srd52:grantsFeature srd52:ExtraAttack .
+srd52:WizardLevel1 a rpg:ClassLevelDefinition ; schema:name "Wizard Level 1"@en ; rpg:levelDefinedInRuleSet srd52:SRD52 ; rpg:levelForClass srd52:Wizard ; rpg:levelNumber 1 ; srd52:grantsFeature srd52:SpellcastingFeature, srd52:ArcaneRecovery .
+
+#################################################################
+# Representative ORAG references
+#################################################################
+
+srd52:loc-playing-the-game-actions a orag:Locator ;
+  orag:inSource srd52:source-srd52-md ;
+  orag:locatorValue "Playing the Game > Actions" .
+
+srd52:loc-playing-the-game-abilities a orag:Locator ;
+  orag:inSource srd52:source-srd52-md ;
+  orag:locatorValue "Playing the Game > The Six Abilities" .
+
+srd52:loc-character-creation a orag:Locator ;
+  orag:inSource srd52:source-srd52-md ;
+  orag:locatorValue "Character Creation" .
+
+srd52:loc-character-origins-backgrounds a orag:Locator ;
+  orag:inSource srd52:source-srd52-md ;
+  orag:locatorValue "Character Origins > Character Backgrounds" .
+
+srd52:loc-classes-barbarian a orag:Locator ;
+  orag:inSource srd52:source-srd52-md ;
+  orag:locatorValue "Classes > Barbarian" .
+
+srd52:loc-classes-wizard a orag:Locator ;
+  orag:inSource srd52:source-srd52-md ;
+  orag:locatorValue "Classes > Wizard" .
+
+srd52:ref-strength a orag:Reference ;
+  orag:refersTo srd52:Strength ;
+  orag:hasLocator srd52:loc-playing-the-game-abilities ;
+  orag:note "Definition of Strength as one of the six core abilities."@en .
+
+srd52:ref-actions a orag:Reference ;
+  orag:refersTo srd52:AttackAction ;
+  orag:hasLocator srd52:loc-playing-the-game-actions ;
+  orag:note "Attack appears in the main action table."@en .
+
+srd52:ref-acolyte a orag:Reference ;
+  orag:refersTo srd52:Acolyte ;
+  orag:hasLocator srd52:loc-character-origins-backgrounds ;
+  orag:note "Background definition with abilities, feat, skills, tool, and equipment."@en .
+
+srd52:ref-barbarian-level1 a orag:Reference ;
+  orag:refersTo srd52:BarbarianLevel1 ;
+  orag:hasLocator srd52:loc-classes-barbarian ;
+  orag:note "Level 1 barbarian features table entry."@en .
+
+srd52:ref-wizard-level1 a orag:Reference ;
+  orag:refersTo srd52:WizardLevel1 ;
+  orag:hasLocator srd52:loc-classes-wizard ;
+  orag:note "Level 1 wizard features table entry."@en .
+
+srd52:Strength srd52:hasSourceReference srd52:ref-strength .
+srd52:AttackAction srd52:hasSourceReference srd52:ref-actions .
+srd52:Acolyte srd52:hasSourceReference srd52:ref-acolyte .
+srd52:BarbarianLevel1 srd52:hasSourceReference srd52:ref-barbarian-level1 .
+srd52:WizardLevel1 srd52:hasSourceReference srd52:ref-wizard-level1 .
+
+#################################################################
+# Modeling notes encoded as triples
+#################################################################
+
+srd52:SRD52 rpg:hasAttributeMapping srd52:map-STR, srd52:map-DEX, srd52:map-CON, srd52:map-INT, srd52:map-WIS, srd52:map-CHA .
+
+srd52:AbilityCheckRoll schema:description "Use this roll definition for raw ability checks and skill checks. Skill application is represented by selecting a Skill capability that defaults to an ability and optionally adds proficiency."@en .
+
+srd52:AttackRollDef schema:description "Use this roll definition for weapon attacks, unarmed strikes, and spell attacks; specific features or weapon properties may override the default ability."@en .
+
+srd52:SRD52 schema:citation "This work includes material from the System Reference Document 5.2 (SRD 5.2) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode."@en .
