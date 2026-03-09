@@ -47,7 +47,7 @@ const Index = () => {
   const description =
     data.ontologyMeta?.comment ||
     data.ontologyMeta?.properties?.["description"]?.[0] ||
-    "D&D SRD 5.2 profile for RPG Schema";
+    "D&D SRD 5.5 profile for RPG Schema";
 
   // Pull out specific groups for dedicated sections
   const abilityScores = grouped["AbilityScore"] || [];
@@ -71,7 +71,7 @@ const Index = () => {
         id="classes"
         index={idx()}
         title="Classes"
-        subtitle="OWL class definitions in the SRD 5.2 ontology"
+        subtitle="OWL class definitions in the SRD 5.5 ontology"
       >
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {data.classes.map((c) => (
